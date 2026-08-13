@@ -1,5 +1,5 @@
 import { CnhCategories } from '../enums/cnh-category';
-import { InvalidDriverError } from '../errors/invalid-driver';
+import { InvalidDriverError } from '../errors/invalid-driver.error';
 import { Cnh } from '../value-object/cnh';
 
 export class Driver {
