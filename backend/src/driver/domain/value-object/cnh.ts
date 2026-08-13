@@ -13,6 +13,10 @@ export class Cnh {
     private readonly status: CnhStatus,
   ) {}
 
+  public getCategories(): CnhCategories[] {
+    return this.categories
+  }
+
   public static create(
     number: string,
     issueDate: Date,
