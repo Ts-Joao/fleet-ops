@@ -10,6 +10,22 @@ export class Driver {
     private readonly cnh: Cnh,
   ) {}
 
+  public getId(): string {
+    return this.id;
+  }
+
+  public getName(): string {
+    return this.name;
+  }
+
+  public getBirthDate(): Date {
+    return this.birthDate;
+  }
+
+  public getCnh(): Cnh {
+    return this.cnh;
+  }
+
   public static create(
     id: string,
     name: string,

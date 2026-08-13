@@ -13,8 +13,28 @@ export class Cnh {
     private readonly status: CnhStatus,
   ) {}
 
+  public getNumber(): string {
+    return this.number;
+  }
+
+  public getIssueDate(): Date {
+    return this.issueDate;
+  }
+
+  public getExpiryDate(): Date {
+    return this.expiryDate;
+  }
+
   public getCategories(): CnhCategories[] {
     return this.categories
+  }
+
+  public getRestrictions(): CnhRestrictions[] {
+    return this.restrictions;
+  }
+
+  public getStatus(): CnhStatus {
+    return this.status;
   }
 
   public static create(
