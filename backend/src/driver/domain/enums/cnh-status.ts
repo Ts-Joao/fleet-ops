@@ -1,0 +1,6 @@
+export enum CnhStatus {
+  ACTIVE = 'ACTIVE',
+  SUSPENDED = 'SUSPENDED',
+  REVOKED = 'REVOKED',
+  EXPIRED = 'EXPIRED',
+}

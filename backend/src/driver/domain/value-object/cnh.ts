@@ -1,5 +1,6 @@
 import { CnhCategories } from '../enums/cnh-category';
 import { CnhRestrictions } from '../enums/cnh-restrictions';
+import { CnhStatus } from '../enums/cnh-status';
 import { InvalidCnhError } from '../errors/invalid-cnh.error';
 
 export class Cnh {
@@ -9,8 +10,7 @@ export class Cnh {
     private readonly expiryDate: Date,
     private readonly categories: CnhCategories[],
     private readonly restrictions: CnhRestrictions[],
-    private readonly isSuspended: boolean,
-    private readonly isRevoked: boolean,
+    private readonly status: CnhStatus,
   ) {}
 
   public static create(
@@ -19,8 +19,7 @@ export class Cnh {
     expiryDate: Date,
     categories: CnhCategories[],
     restrictions: CnhRestrictions[],
-    isSuspended: boolean,
-    isRevoked: boolean,
+    status: CnhStatus,
   ): Cnh {
     const cnh = new Cnh(
       number,
@@ -28,8 +27,7 @@ export class Cnh {
       expiryDate,
       categories,
       restrictions,
-      isSuspended,
-      isRevoked,
+      status
     );
 
     Cnh.validate(cnh);
@@ -42,8 +40,7 @@ export class Cnh {
     Cnh.validateIsExpired(cnh.expiryDate);
     Cnh.validateCategories(cnh.categories);
     Cnh.validateRestrictions(cnh.restrictions);
-    Cnh.validateIsSuspended(cnh.isSuspended);
-    Cnh.validateIsRevoked(cnh.isRevoked);
+    Cnh.validateStatus(cnh.status);
   }
 
   private static validateNumber(number: string): void {
@@ -104,15 +101,27 @@ export class Cnh {
     }
   }
 
-  private static validateIsSuspended(isSuspended: boolean): void {
-    if (typeof isSuspended !== 'boolean') {
+  private static validateStatus(status: CnhStatus): void {
+    this.validateIsSuspended(status);
+    this.validateIsRevoked(status);
+    this.validateIsExpiredStatus(status);
+  }
+
+  private static validateIsSuspended(status: CnhStatus): void {
+    if (status === CnhStatus.SUSPENDED) {
       throw new InvalidCnhError('Invalid CNH suspended');
     }
   }
 
-  private static validateIsRevoked(isRevoked: boolean): void {
-    if (typeof isRevoked !== 'boolean') {
+  private static validateIsRevoked(status: CnhStatus): void {
+    if (status === CnhStatus.REVOKED) {
       throw new InvalidCnhError('Invalid CNH revoked');
+    }
+  }
+
+  private static validateIsExpiredStatus(status: CnhStatus): void {
+    if (status === CnhStatus.EXPIRED) {
+      throw new InvalidCnhError('Invalid CNH expired');
     }
   }
 }
