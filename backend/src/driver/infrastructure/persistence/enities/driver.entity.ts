@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
-import { CnhStatus } from 'src/driver/domain/enums/cnh-status';
-import { CnhCategories } from 'src/driver/domain/enums/cnh-category';
-import { CnhRestrictions } from 'src/driver/domain/enums/cnh-restrictions';
+import { CnhStatus } from '../../../domain/enums/cnh-status';
+import { CnhCategories } from '../../../domain/enums/cnh-category';
+import { CnhRestrictions } from '../../../domain/enums/cnh-restrictions';
 
 @Entity('drivers')
 export class DriverEntity {
