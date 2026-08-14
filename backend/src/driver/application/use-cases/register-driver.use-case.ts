@@ -3,12 +3,23 @@ import { Driver } from 'src/driver/domain/entities/driver';
 import { IdGenerator } from 'src/shared/application/ports/id-generator.port';
 import { RegisterDriverInput } from '../dto/register-drive.input';
 import { DriverRepository } from 'src/driver/domain/ports/driver-repository';
+import { CnhAlreadyExistsError } from 'src/driver/domain/errors/cnh-already-exist.error';
 
 export class RegisterDriverUseCase {
-  constructor(private readonly driverRepository: DriverRepository, private readonly idGenerator: IdGenerator) {}
+  constructor(
+    private readonly driverRepository: DriverRepository,
+    private readonly idGenerator: IdGenerator,
+  ) {}
 
-  execute(input: RegisterDriverInput) {
+  async execute(input: RegisterDriverInput) {
     const id = this.idGenerator.generate();
+    const cnhAlreadyExists = await this.driverRepository.findByCnhNumber(
+      input.cnh.number,
+    );
+
+    if (cnhAlreadyExists) {
+      throw new CnhAlreadyExistsError();
+    }
 
     const cnh = Cnh.create(
       input.cnh.number,
@@ -19,12 +30,7 @@ export class RegisterDriverUseCase {
       input.cnh.status,
     );
 
-    const driver = Driver.create(
-      id,
-      input.name,
-      input.birthDate,
-      cnh,
-    );
+    const driver = Driver.create(id, input.name, input.birthDate, cnh);
 
     return this.driverRepository.save(driver);
   }
