@@ -11,6 +11,7 @@ export class DomainExceptionFilter implements ExceptionFilter<DomainError> {
   private readonly statusByType: Record<DommainErrorType, HttpStatus> = {
     [DommainErrorType.INVALID]: HttpStatus.BAD_REQUEST,
     [DommainErrorType.NOT_FOUND]: HttpStatus.NOT_FOUND,
+    [DommainErrorType.CONFLICT]: HttpStatus.CONFLICT,
   }
 
   catch(exception: DomainError, host: ArgumentsHost) {
