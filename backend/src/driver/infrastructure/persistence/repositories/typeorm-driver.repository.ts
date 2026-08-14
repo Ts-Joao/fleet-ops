@@ -21,10 +21,14 @@ export class TypeOrmDriverRepository implements DriverRepository {
   }
 
   async findById(id: string): Promise<Driver | null> {
-    const entity = await this.repository.findOne({ where: { id } });
+    const entity = await this.repository.findOne({
+      where: { id }
+    });
+
     if (!entity) {
       return null;
     }
+
     return DriverMapper.toDomain(entity);
   }
 }
