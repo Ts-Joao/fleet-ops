@@ -14,7 +14,7 @@ export class DriverEntity {
   @Column({ name: 'birth_date', type: 'date' })
   birthDate: Date;
 
-  @Column({ name: 'cnh_number' })
+  @Column({ name: 'cnh_number', unique: true })
   cnhNumber: string;
 
   @Column({ name: 'cnh_issue_date', type: 'date' })
