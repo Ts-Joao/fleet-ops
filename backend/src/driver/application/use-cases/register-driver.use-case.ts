@@ -1,12 +1,15 @@
 import { Cnh } from 'src/driver/domain/value-object/cnh';
 import { Driver } from 'src/driver/domain/entities/driver';
+import { IdGenerator } from 'src/shared/application/ports/id-generator.port';
 import { RegisterDriverInput } from '../dto/register-drive.input';
 import { DriverRepository } from 'src/driver/domain/ports/driver-repository';
 
 export class RegisterDriverUseCase {
-  constructor(private readonly driverRepository: DriverRepository) {}
+  constructor(private readonly driverRepository: DriverRepository, private readonly idGenerator: IdGenerator) {}
 
   execute(input: RegisterDriverInput) {
+    const id = this.idGenerator.generate();
+
     const cnh = Cnh.create(
       input.cnh.number,
       input.cnh.issueDate,
@@ -17,7 +20,7 @@ export class RegisterDriverUseCase {
     );
 
     const driver = Driver.create(
-      input.id,
+      id,
       input.name,
       input.birthDate,
       cnh,
