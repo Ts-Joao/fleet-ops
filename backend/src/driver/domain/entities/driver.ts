@@ -5,11 +5,11 @@ import { Cnh } from '../value-object/cnh';
 export class Driver {
   private constructor(
     private readonly id: string,
-    private readonly name: string,
-    private readonly birthDate: Date,
-    private readonly cnh: Cnh,
+    private name: string,
+    private birthDate: Date,
+    private cnh: Cnh,
   ) {}
-
+  
   public getId(): string {
     return this.id;
   }
@@ -43,10 +43,26 @@ export class Driver {
     return driver;
   }
 
+  public changeName(name: string): void {
+    Driver.validateName(name);
+    this.name = name;
+  }
+
+  public changeBirthDate(birthDate: Date): void {
+    Driver.validateAge(birthDate, this.cnh);
+    this.birthDate = birthDate;
+  }
+
+  public changeCnh(cnh: Cnh): void {
+    Driver.validateHasCnh(cnh);
+    Driver.validateAge(this.birthDate, cnh)
+    this.cnh = cnh;
+  }
+
   private static validate(driver: Driver): void {
     Driver.validateId(driver.id);
     Driver.validateName(driver.name);
-    Driver.validateCnh(driver.cnh);
+    Driver.validateHasCnh(driver.cnh);
     Driver.validateAge(driver.birthDate, driver.cnh);
   }
 
@@ -109,7 +125,7 @@ export class Driver {
     }
   }
 
-  private static validateCnh(cnh: Cnh): void {
+  private static validateHasCnh(cnh: Cnh): void {
     if (!cnh) {
       throw new InvalidDriverError('CNH is required');
     }
