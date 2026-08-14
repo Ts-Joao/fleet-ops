@@ -7,11 +7,15 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Query,
 } from '@nestjs/common';
 import { RegisterDriverUseCase } from 'src/driver/application/use-cases/register-driver.use-case';
-import { RegisterDriverRequest } from '../dto/register-driver.request';
 import { FindDriverByIdUseCase } from 'src/driver/application/use-cases/find-driver-by-id.use-case';
 import { FindDriverByCnhNumberUseCase } from 'src/driver/application/use-cases/find-driver-by-cnh-number.use-case';
+import { SearchDriversUseCase } from 'src/driver/application/use-cases/search-drivers.use-case';
+import { RegisterDriverRequest } from '../dto/register-driver.request';
+import { SearchDriverRequest } from '../dto/search-driver.request';
+import { CnhCategories } from 'src/driver/domain/enums/cnh-category';
 
 @Controller('driver')
 export class DriverController {
@@ -19,12 +23,23 @@ export class DriverController {
     private readonly registerDriverUseCase: RegisterDriverUseCase,
     private readonly findDriverByIdUseCase: FindDriverByIdUseCase,
     private readonly findDriverByCnhNumberUseCase: FindDriverByCnhNumberUseCase,
+    private readonly searchDriversUseCase: SearchDriversUseCase,
   ) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() request: RegisterDriverRequest) {
     return this.registerDriverUseCase.execute(request);
+  }
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async search(
+    @Query('name') name: string,
+    @Query('cnhCategories') cnhCategories: CnhCategories[],
+  ) {
+    const filters: SearchDriverRequest = { name, cnhCategories }
+    return this.searchDriversUseCase.execute(filters)
   }
 
   @Get(':id')

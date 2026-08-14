@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, ILike, Raw, Repository } from 'typeorm';
 import { Driver } from 'src/driver/domain/entities/driver';
-import { DriverRepository } from 'src/driver/domain/ports/driver-repository';
+import { DriverRepository, DriverSearchFilters } from 'src/driver/domain/ports/driver-repository';
 import { DriverEntity } from '../enities/driver.entity';
 import { DriverMapper } from '../mappers/driver.mapper';
 
@@ -18,6 +18,27 @@ export class TypeOrmDriverRepository implements DriverRepository {
     const savedEntity = await this.repository.save(entity);
 
     return DriverMapper.toDomain(savedEntity);
+  }
+
+  async findMany(filters: DriverSearchFilters): Promise<Driver[]> {
+    const where: FindOptionsWhere<DriverEntity> = {}
+
+    if (filters.name) {
+      where.name = ILike(`%${filters.name}%`)
+    }
+
+    if (filters.cnhCategories) {
+      where.cnhCategories = Raw(
+        (alias) => `${alias}:: jsonb @> :cnhCategories`,
+        { cnhCategories: JSON.stringify(filters.cnhCategories) },
+      );
+    }
+
+    const entities = await this.repository.find({
+      where,
+    });
+
+    return entities.map(entity => DriverMapper.toDomain(entity));
   }
 
   async findById(id: string): Promise<Driver | null> {
