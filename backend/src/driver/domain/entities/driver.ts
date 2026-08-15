@@ -45,16 +45,16 @@ export class Driver {
   }
 
   public update(input: UpdateDriverInput): void {
-    if (input.name) {
+    if (input.name !== undefined) {
       this.changeName(input.name);
     }
 
-    if (input.birthDate) {
+    if (input.birthDate !== undefined) {
       this.changeBirthDate(input.birthDate);
     }
 
-    if (input.cnh) {
-      this.changeCnh(Cnh.update(this.cnh, input.cnh));
+    if (input.cnh !== undefined) {
+      this.changeCnh(Cnh.updateFrom(this.cnh, input.cnh));
     }
   }
 
@@ -112,20 +112,23 @@ export class Driver {
   }
 
   private static calculateDriverAge(birthDate: Date): number {
-    let age: number;
     const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth();
-    const currentDay = currentDate.getDate();
-    const birthYear = birthDate.getFullYear();
-    const birthMonth = birthDate.getMonth();
-    const birthDay = birthDate.getDate();
 
     if (birthDate > currentDate) {
       throw new InvalidDriverError('Driver birth date is invalid');
     }
 
-    age = currentYear - birthYear;
+    if (Number.isNaN(birthDate.getTime())) {
+      throw new InvalidDriverError(
+        'Driver birth date is invalid',
+      );
+    }
+
+    let age = currentDate.getFullYear() - birthDate.getFullYear();
+    const currentMonth = currentDate.getMonth();
+    const currentDay = currentDate.getDate();
+    const birthMonth = birthDate.getMonth();
+    const birthDay = birthDate.getDate();
 
     if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
       age--;
