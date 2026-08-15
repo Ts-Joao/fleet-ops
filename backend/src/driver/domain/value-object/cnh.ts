@@ -1,4 +1,3 @@
-import { UpdateCnhInput } from 'src/driver/application/dto/update-cnh.input';
 import { CnhCategories } from '../enums/cnh-category';
 import { CnhRestrictions } from '../enums/cnh-restrictions';
 import { CnhStatus } from '../enums/cnh-status';
@@ -57,19 +56,6 @@ export class Cnh {
 
     Cnh.validate(cnh);
     return cnh;
-  }
-
-  public static updateFrom(cnh: Cnh, input: UpdateCnhInput): Cnh {
-    const updatedCnh = Cnh.create(
-      input.number ?? cnh.getNumber(),
-      input.issueDate ?? cnh.getIssueDate(),
-      input.expiryDate ?? cnh.getExpiryDate(),
-      input.categories ?? cnh.getCategories(),
-      input.restrictions ?? cnh.getRestrictions(),
-      input.status ?? cnh.getStatus(),
-    )
-
-    return updatedCnh;
   }
 
   private static validate(cnh: Cnh): void {

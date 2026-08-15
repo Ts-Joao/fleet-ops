@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -16,6 +17,8 @@ import { SearchDriversUseCase } from 'src/driver/application/use-cases/search-dr
 import { RegisterDriverRequest } from '../dto/register-driver.request';
 import { SearchDriverRequest } from '../dto/search-driver.request';
 import { CnhCategories } from 'src/driver/domain/enums/cnh-category';
+import { UpdateDriverRequest } from '../dto/update-driver.request';
+import { UpdateDriverUseCase } from 'src/driver/application/use-cases/update-driver.use-case';
 
 @Controller('driver')
 export class DriverController {
@@ -24,6 +27,7 @@ export class DriverController {
     private readonly findDriverByIdUseCase: FindDriverByIdUseCase,
     private readonly findDriverByCnhNumberUseCase: FindDriverByCnhNumberUseCase,
     private readonly searchDriversUseCase: SearchDriversUseCase,
+    private readonly updateDriverUseCase: UpdateDriverUseCase,
   ) {}
 
   @Post()
@@ -52,5 +56,14 @@ export class DriverController {
   @HttpCode(HttpStatus.OK)
   async findByCnhNumber(@Param('number') number: string) {
     return this.findDriverByCnhNumberUseCase.execute(number);
+  }
+
+  @Patch(':id')
+  @HttpCode(HttpStatus.OK)
+  async update(@Param('id', ParseUUIDPipe) id: string, @Body() request: UpdateDriverRequest) {
+    return this.updateDriverUseCase.execute({
+      id,
+      ...request
+    });
   }
 }
