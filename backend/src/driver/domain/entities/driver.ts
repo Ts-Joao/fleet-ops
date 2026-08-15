@@ -1,3 +1,4 @@
+import { UpdateDriverInput } from 'src/driver/application/dto/update-driver.input';
 import { CnhCategories } from '../enums/cnh-category';
 import { InvalidDriverError } from '../errors/invalid-driver.error';
 import { Cnh } from '../value-object/cnh';
@@ -43,6 +44,20 @@ export class Driver {
     return driver;
   }
 
+  public update(input: UpdateDriverInput): void {
+    if (input.name) {
+      this.changeName(input.name);
+    }
+
+    if (input.birthDate) {
+      this.changeBirthDate(input.birthDate);
+    }
+
+    if (input.cnh) {
+      this.changeCnh(Cnh.update(this.cnh, input.cnh));
+    }
+  }
+
   public changeName(name: string): void {
     Driver.validateName(name);
     this.name = name;
@@ -55,7 +70,7 @@ export class Driver {
 
   public changeCnh(cnh: Cnh): void {
     Driver.validateHasCnh(cnh);
-    Driver.validateAge(this.birthDate, cnh)
+    Driver.validateAge(this.birthDate, cnh);
     this.cnh = cnh;
   }
 
