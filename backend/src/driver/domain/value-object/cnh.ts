@@ -27,11 +27,11 @@ export class Cnh {
   }
 
   public getCategories(): CnhCategories[] {
-    return this.categories
+    return [...this.categories];
   }
 
   public getRestrictions(): CnhRestrictions[] {
-    return this.restrictions;
+    return [...this.restrictions];
   }
 
   public getStatus(): CnhStatus {
@@ -59,7 +59,7 @@ export class Cnh {
     return cnh;
   }
 
-  public static update(cnh: Cnh, input: UpdateCnhInput): Cnh {
+  public static updateFrom(cnh: Cnh, input: UpdateCnhInput): Cnh {
     const updatedCnh = Cnh.create(
       input.number ?? cnh.getNumber(),
       input.issueDate ?? cnh.getIssueDate(),
@@ -75,7 +75,7 @@ export class Cnh {
   private static validate(cnh: Cnh): void {
     Cnh.validateNumber(cnh.number);
     Cnh.validateIssueDate(cnh.issueDate);
-    Cnh.validateIsExpired(cnh.expiryDate);
+    Cnh.validateExpiryDate(cnh.issueDate, cnh.expiryDate);
     Cnh.validateCategories(cnh.categories);
     Cnh.validateRestrictions(cnh.restrictions);
     Cnh.validateStatus(cnh.status);
@@ -89,8 +89,7 @@ export class Cnh {
   }
 
   private static validateDate(date: Date): void {
-    const regex = /^\d{2}\/\d{2}\/\d{4}$/;
-    if (!regex.test(date.toISOString().split('T')[0])) {
+    if (Number.isNaN(date.getTime())) {
       throw new InvalidCnhError('Invalid CNH date');
     }
   }
@@ -102,10 +101,10 @@ export class Cnh {
     }
   }
 
-  private static validateIsExpired(expiryDate: Date): void {
+  private static validateExpiryDate(issueDate: Date, expiryDate: Date): void {
     this.validateDate(expiryDate);
-    if (expiryDate < new Date()) {
-      throw new InvalidCnhError('Invalid CNH expired');
+    if (expiryDate <= issueDate) {
+      throw new InvalidCnhError('Invalid CNH expiry date');
     }
   }
 
@@ -122,8 +121,8 @@ export class Cnh {
   private static validateCategories(categories: CnhCategories[]): void {
     Cnh.hasDuplicates(categories, 'categories');
 
-    for (const category of Object.values(CnhCategories)) {
-      if (!categories.includes(category)) {
+    for (const category of categories) {
+      if (!Object.values(CnhCategories).includes(category)) {
         throw new InvalidCnhError(`Invalid CNH category: ${category}`);
       }
     }
@@ -132,34 +131,16 @@ export class Cnh {
   private static validateRestrictions(restrictions: CnhRestrictions[]): void {
     Cnh.hasDuplicates(restrictions, 'restrictions');
 
-    for (const restriction of Object.values(CnhRestrictions)) {
-      if (!restrictions.includes(restriction)) {
+    for (const restriction of restrictions) {
+      if (!Object.values(CnhRestrictions).includes(restriction)) {
         throw new InvalidCnhError(`Invalid CNH restriction: ${restriction}`);
       }
     }
   }
 
   private static validateStatus(status: CnhStatus): void {
-    this.validateIsSuspended(status);
-    this.validateIsRevoked(status);
-    this.validateIsExpiredStatus(status);
-  }
-
-  private static validateIsSuspended(status: CnhStatus): void {
-    if (status === CnhStatus.SUSPENDED) {
-      throw new InvalidCnhError('Invalid CNH suspended');
-    }
-  }
-
-  private static validateIsRevoked(status: CnhStatus): void {
-    if (status === CnhStatus.REVOKED) {
-      throw new InvalidCnhError('Invalid CNH revoked');
-    }
-  }
-
-  private static validateIsExpiredStatus(status: CnhStatus): void {
-    if (status === CnhStatus.EXPIRED) {
-      throw new InvalidCnhError('Invalid CNH expired');
+    if (!Object.values(CnhStatus).includes(status)) {
+      throw new InvalidCnhError(`Invalid CNH status: ${status}`);
     }
   }
 }
