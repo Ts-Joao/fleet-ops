@@ -1,6 +1,6 @@
-import { CnhCategories } from '../enums/cnh-category';
-import { InvalidDriverError } from '../errors/invalid-driver.error';
-import { Cnh } from '../value-object/cnh';
+import { CnhCategories } from '@driver/domain/enums/cnh-category';
+import { InvalidDriverError } from '@driver/domain/errors/invalid-driver.error';
+import { Cnh } from '@driver/domain/value-object/cnh';
 
 export class Driver {
   private constructor(
@@ -96,7 +96,7 @@ export class Driver {
     }
   }
 
-  private static calculateDriverAge(birthDate: Date): number {
+  public static calculateDriverAge(birthDate: Date): number {
     const currentDate = new Date();
 
     if (birthDate > currentDate) {
