@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -19,6 +20,7 @@ import { SearchDriverRequest } from '../dto/search-driver.request';
 import { CnhCategories } from 'src/driver/domain/enums/cnh-category';
 import { UpdateDriverRequest } from '../dto/update-driver.request';
 import { UpdateDriverUseCase } from 'src/driver/application/use-cases/update-driver.use-case';
+import { DeleteDriverUseCase } from 'src/driver/application/use-cases/delete-driver.use-case';
 
 @Controller('driver')
 export class DriverController {
@@ -28,6 +30,7 @@ export class DriverController {
     private readonly findDriverByCnhNumberUseCase: FindDriverByCnhNumberUseCase,
     private readonly searchDriversUseCase: SearchDriversUseCase,
     private readonly updateDriverUseCase: UpdateDriverUseCase,
+    private readonly deleteDriverUseCase: DeleteDriverUseCase,
   ) {}
 
   @Post()
@@ -65,5 +68,11 @@ export class DriverController {
       id,
       ...request
     });
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.OK)
+  async delete(@Param('id', ParseUUIDPipe) id: string) {
+    return this.deleteDriverUseCase.execute(id);
   }
 }

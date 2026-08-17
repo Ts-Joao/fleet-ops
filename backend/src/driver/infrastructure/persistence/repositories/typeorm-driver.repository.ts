@@ -64,4 +64,8 @@ export class TypeOrmDriverRepository implements DriverRepository {
 
     return DriverMapper.toDomain(entity);
   }
+
+  async delete(id: string): Promise<void> {
+    await this.repository.delete(id);
+  }
 }

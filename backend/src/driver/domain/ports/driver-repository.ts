@@ -9,6 +9,8 @@ export abstract class DriverRepository {
   abstract findById(id: string): Promise<Driver | null>;
 
   abstract findByCnhNumber(cnhNumber: string): Promise<Driver | null>;
+
+  abstract delete(id: string): Promise<void>;
 }
 
 export interface DriverSearchFilters {
