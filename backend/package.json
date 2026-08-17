@@ -68,10 +68,14 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "^@driver/(.*)$": "<rootDir>/src/driver/$1",
+      "^@shared/(.*)$": "<rootDir>/src/shared/$1"
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"

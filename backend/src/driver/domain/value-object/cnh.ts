@@ -1,7 +1,7 @@
-import { CnhCategories } from '../enums/cnh-category';
-import { CnhRestrictions } from '../enums/cnh-restrictions';
-import { CnhStatus } from '../enums/cnh-status';
-import { InvalidCnhError } from '../errors/invalid-cnh.error';
+import { CnhCategories } from '@driver/domain/enums/cnh-category';
+import { CnhRestrictions } from '@driver/domain/enums/cnh-restrictions';
+import { CnhStatus } from '@driver/domain/enums/cnh-status';
+import { InvalidCnhError } from '@driver/domain/errors/invalid-cnh.error';
 
 export class Cnh {
   private constructor(
@@ -35,6 +35,10 @@ export class Cnh {
 
   public getStatus(): CnhStatus {
     return this.status;
+  }
+
+  public isExpired(): boolean {
+    return this.status === CnhStatus.EXPIRED;
   }
 
   public static create(
