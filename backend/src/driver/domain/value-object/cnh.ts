@@ -37,10 +37,6 @@ export class Cnh {
     return this.status;
   }
 
-  public isExpired(): boolean {
-    return this.status === CnhStatus.EXPIRED;
-  }
-
   public static create(
     number: string,
     issueDate: Date,
@@ -110,6 +106,10 @@ export class Cnh {
 
   private static validateCategories(categories: CnhCategories[]): void {
     Cnh.hasDuplicates(categories, 'categories');
+
+    if(categories.length === 0) {
+      throw new InvalidCnhError('Invalid CNH categories');
+    }
 
     for (const category of categories) {
       if (!Object.values(CnhCategories).includes(category)) {

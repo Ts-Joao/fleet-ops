@@ -102,35 +102,6 @@ describe('CNH', () => {
       }).toThrow(InvalidCnhError);
     });
 
-    it('should reject duplicate categories', () => {
-      expect(() => {
-        Cnh.create(
-          '12345678901',
-          new Date(2022, 10, 1),
-          new Date(2032, 10, 1),
-          [CnhCategories.B, CnhCategories.B],
-          [],
-          CnhStatus.ACTIVE,
-        );
-      }).toThrow(InvalidCnhError);
-    });
-
-    it('should reject duplicate restrictions', () => {
-      expect(() => {
-        Cnh.create(
-          '12345678901',
-          new Date(2022, 10, 1),
-          new Date(2032, 10, 1),
-          [CnhCategories.B],
-          [
-            CnhRestrictions.CORRECTIVE_LENSES,
-            CnhRestrictions.CORRECTIVE_LENSES,
-          ],
-          CnhStatus.ACTIVE,
-        );
-      }).toThrow(InvalidCnhError);
-    });
-
     it('should reject an invalid status', () => {
       expect(() => {
         Cnh.create(
@@ -143,9 +114,81 @@ describe('CNH', () => {
         );
       }).toThrow(InvalidCnhError);
     });
+
+    describe('categories', () => {
+      it('should reject invalid category', () => {
+        expect(() => {
+          Cnh.create(
+            '12345678901',
+            new Date(2022, 10, 1),
+            new Date(2032, 10, 1),
+            ['invalid' as CnhCategories],
+            [],
+            CnhStatus.ACTIVE,
+          );
+        }).toThrow(InvalidCnhError);
+      })
+  
+      it('should reject duplicate categories', () => {
+        expect(() => {
+          Cnh.create(
+            '12345678901',
+            new Date(2022, 10, 1),
+            new Date(2032, 10, 1),
+            [CnhCategories.B, CnhCategories.B],
+            [],
+            CnhStatus.ACTIVE,
+          );
+        }).toThrow(InvalidCnhError);
+      });
+  
+      it('should reject empty categories', () => {
+        expect(() => {
+          Cnh.create(
+            '12345678901',
+            new Date(2022, 10, 1),
+            new Date(2032, 10, 1),
+            [],
+            [],
+            CnhStatus.ACTIVE,
+          );
+        }).toThrow(InvalidCnhError);
+      });
+    })
+
+    describe('restrictions', () => {
+      it('should reject invalid restriction', () => {
+        expect(() => {
+          Cnh.create(
+            '12345678901',
+            new Date(2022, 10, 1),
+            new Date(2032, 10, 1),
+            [CnhCategories.B],
+            ['invalid' as CnhRestrictions],
+            CnhStatus.ACTIVE,
+          );
+        }).toThrow(InvalidCnhError);
+      })
+
+      it('should reject duplicate restrictions', () => {
+        expect(() => {
+          Cnh.create(
+            '12345678901',
+            new Date(2022, 10, 1),
+            new Date(2032, 10, 1),
+            [CnhCategories.B],
+            [
+              CnhRestrictions.CORRECTIVE_LENSES,
+              CnhRestrictions.CORRECTIVE_LENSES,
+            ],
+            CnhStatus.ACTIVE,
+          );
+        }).toThrow(InvalidCnhError);
+      });
+    })
   });
 
-  describe('isExpired() method', () => {
+  describe('isExpired', () => {
     it('should return true when the CNH is expired', () => {
       const expiredCnh = Cnh.create(
         '12345678901',
@@ -153,16 +196,16 @@ describe('CNH', () => {
         new Date(2024, 10, 1),
         [CnhCategories.B],
         [],
-        CnhStatus.EXPIRED,
+        CnhStatus.ACTIVE,
       );
 
-      expect(expiredCnh.isExpired()).toBe(true);
+      expect(expiredCnh.getExpiryDate() < new Date()).toBe(true);
     });
 
     it('should return false when the CNH is valid', () => {
       const cnh = makeCnh();
 
-      expect(cnh.isExpired()).toBe(false);
+      expect(cnh.getExpiryDate() < new Date()).toBe(false);
     });
   });
 });
