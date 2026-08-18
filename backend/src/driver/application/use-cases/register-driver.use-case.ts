@@ -1,9 +1,9 @@
-import { Cnh } from 'src/driver/domain/value-object/cnh';
-import { Driver } from 'src/driver/domain/entities/driver';
-import { IdGenerator } from 'src/shared/application/ports/id-generator.port';
-import { RegisterDriverInput } from '../dto/register-drive.input';
-import { DriverRepository } from 'src/driver/domain/ports/driver-repository';
-import { CnhAlreadyExistsError } from 'src/driver/domain/errors/cnh-already-exist.error';
+import { Driver } from '@driver/domain/entities/driver';
+import { Cnh } from '@driver/domain/value-object/cnh';
+import { IdGenerator } from '@shared/application/ports/id-generator.port';
+import { RegisterDriverInput } from '../dto/register-driver.input';
+import { DriverRepository } from '@driver/domain/ports/driver-repository';
+import { CnhAlreadyExistsError } from '@driver/domain/errors/cnh-already-exist.error';
 
 export class RegisterDriverUseCase {
   constructor(
@@ -12,7 +12,6 @@ export class RegisterDriverUseCase {
   ) {}
 
   async execute(input: RegisterDriverInput) {
-    const id = this.idGenerator.generate();
     const cnhAlreadyExists = await this.driverRepository.findByCnhNumber(
       input.cnh.number,
     );
@@ -21,6 +20,7 @@ export class RegisterDriverUseCase {
       throw new CnhAlreadyExistsError();
     }
 
+    const id = this.idGenerator.generate();
     const cnh = Cnh.create(
       input.cnh.number,
       input.cnh.issueDate,
