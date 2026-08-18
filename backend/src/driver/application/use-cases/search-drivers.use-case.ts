@@ -1,4 +1,4 @@
-import { DriverRepository, DriverSearchFilters } from 'src/driver/domain/ports/driver-repository';
+import { DriverRepository, DriverSearchFilters } from '@driver/domain/ports/driver-repository';
 
 export class SearchDriversUseCase {
   constructor(private readonly driverRepository: DriverRepository) {}
