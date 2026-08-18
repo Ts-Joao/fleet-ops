@@ -1,5 +1,5 @@
-import { DriverNotFoundError } from "src/driver/domain/errors/driver-not-found.error";
-import { DriverRepository } from "src/driver/domain/ports/driver-repository";
+import { DriverNotFoundError } from '@driver/domain/errors/driver-not-found.error';
+import { DriverRepository } from '@driver/domain/ports/driver-repository';
 
 export class DeleteDriverUseCase {
   constructor(private readonly driverRepository: DriverRepository) {}
