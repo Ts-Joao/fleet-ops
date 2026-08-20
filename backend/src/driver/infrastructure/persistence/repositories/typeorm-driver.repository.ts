@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ArrayContains, FindOptionsWhere, ILike, Raw, Repository } from 'typeorm';
 import { Driver } from 'src/driver/domain/entities/driver';
 import { DriverRepository, DriverSearchFilters } from 'src/driver/domain/ports/driver-repository';
-import { DriverEntity } from '../enities/driver.entity';
+import { DriverEntity } from '@driver/infrastructure/persistence/entities/driver.entity';
 import { DriverMapper } from '../mappers/driver.mapper';
 
 @Injectable()

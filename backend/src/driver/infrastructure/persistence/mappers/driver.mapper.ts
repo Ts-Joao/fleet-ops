@@ -1,7 +1,7 @@
 import { Cnh } from "src/driver/domain/value-object/cnh";
-import { DriverEntity } from "../enities/driver.entity";
+import { DriverEntity } from "@driver/infrastructure/persistence/entities/driver.entity";
 import { Driver } from "src/driver/domain/entities/driver";
-import { CnhEntity } from "../enities/cnh.entity";
+import { CnhEntity } from "@driver/infrastructure/persistence/entities/cnh.entity";
 
 export class DriverMapper {
   static toDomain(entity: DriverEntity): Driver {
