@@ -49,10 +49,10 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-workspace
 
       - name: Run migrations
-        run: pnpm migration:run
+        run: pnpm --ignore-workspace migration:run
 
       - name: Run unit tests
-        run: pnpm test
+        run: pnpm --ignore-workspace test
 
       - name: Run integration tests
         env:
@@ -61,7 +61,7 @@ jobs:
           POSTGRES_USER: test
           POSTGRES_PASSWORD: test
           POSTGRES_TEST_PORT: 5432
-        run: pnpm test:integration
+        run: pnpm --ignore-workspace test:integration
 
       - name: Run E2E tests
         env:
@@ -70,4 +70,4 @@ jobs:
           POSTGRES_USER: test
           POSTGRES_PASSWORD: test
           POSTGRES_TEST_PORT: 5432
-        run: pnpm test:e2e
+        run: pnpm --ignore-workspace test:e2e
