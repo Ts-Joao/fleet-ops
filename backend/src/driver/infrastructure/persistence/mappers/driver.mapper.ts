@@ -4,7 +4,11 @@ import { Driver } from "src/driver/domain/entities/driver";
 import { CnhEntity } from "../enities/cnh.entity";
 
 export class DriverMapper {
-  static toDomain(entity: DriverEntity) {
+  static toDomain(entity: DriverEntity): Driver {
+    if (!entity.cnh) {
+      throw new Error('Driver CNH relation is not loaded');
+    }
+
     const cnh = Cnh.create(
       entity.cnh.number,
       new Date(entity.cnh.issueDate),
@@ -12,21 +16,21 @@ export class DriverMapper {
       entity.cnh.categories,
       entity.cnh.restrictions,
       entity.cnh.status,
-    )
+    );
 
     return Driver.create(
       entity.id,
       entity.name,
       new Date(entity.birthDate),
-      cnh
-    )
+      cnh,
+    );
   }
 
-  static toEntity(domain: Driver): DriverEntity {
+  static toEntity(domain: Driver, existingCnhId?: string): DriverEntity {
     const entity = new DriverEntity();
     const cnhEntity = new CnhEntity();
 
-    cnhEntity.id = crypto.randomUUID();
+    cnhEntity.id = existingCnhId ?? crypto.randomUUID();
     cnhEntity.number = domain.getCnh().getNumber();
     cnhEntity.issueDate = domain.getCnh().getIssueDate();
     cnhEntity.expiryDate = domain.getCnh().getExpiryDate();

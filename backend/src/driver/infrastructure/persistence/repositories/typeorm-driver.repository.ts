@@ -14,8 +14,18 @@ export class TypeOrmDriverRepository implements DriverRepository {
   ) {}
 
   async save(driver: Driver): Promise<Driver> {
-    const entity = DriverMapper.toEntity(driver);
+    const existingEntity = await this.repository.findOne({
+      where: { id: driver.getId() },
+      relations: { cnh: true },
+    });
+
+    const entity = DriverMapper.toEntity(driver, existingEntity?.cnh?.id);
+
     const savedEntity = await this.repository.save(entity);
+
+    if (!savedEntity.cnh && existingEntity?.cnh) {
+      savedEntity.cnh = existingEntity.cnh;
+    }
 
     return DriverMapper.toDomain(savedEntity);
   }
