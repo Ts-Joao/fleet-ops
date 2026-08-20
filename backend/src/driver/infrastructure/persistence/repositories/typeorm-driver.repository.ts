@@ -21,23 +21,25 @@ export class TypeOrmDriverRepository implements DriverRepository {
   }
 
   async findMany(filters: DriverSearchFilters): Promise<Driver[]> {
-    const where: FindOptionsWhere<DriverEntity> = {}
+    const query = this.repository
+      .createQueryBuilder('driver')
+      .leftJoinAndSelect('driver.cnh', 'cnh');
 
-    if (filters.name) {
-      where.name = ILike(`%${filters.name}%`)
+    if (filters?.name) {
+      query.andWhere('driver.name ILIKE :name', {
+        name: `%${filters.name}%`,
+      });
     }
 
-    if (filters.cnhCategories) {
-      where.cnh = {
-        categories: ArrayContains(filters.cnhCategories)
-      }
+    if (filters?.cnhCategories && filters.cnhCategories.length > 0) {
+      query.andWhere('cnh.categories::jsonb @> :categories::jsonb', {
+        categories: JSON.stringify(filters.cnhCategories),
+      });
     }
 
-    const entities = await this.repository.find({
-      where,
-    });
+    const entities = await query.getMany();
 
-    return entities.map(entity => DriverMapper.toDomain(entity));
+    return entities.map((entity) => DriverMapper.toDomain(entity));
   }
 
   async findById(id: string): Promise<Driver | null> {

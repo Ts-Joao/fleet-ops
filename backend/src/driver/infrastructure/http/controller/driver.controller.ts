@@ -17,7 +17,6 @@ import { FindDriverByCnhNumberUseCase } from 'src/driver/application/use-cases/f
 import { SearchDriversUseCase } from 'src/driver/application/use-cases/search-drivers.use-case';
 import { RegisterDriverRequest } from '../dto/register-driver.request';
 import { SearchDriverRequest } from '../dto/search-driver.request';
-import { CnhCategories } from 'src/driver/domain/enums/cnh-category';
 import { UpdateDriverRequest } from '../dto/update-driver.request';
 import { UpdateDriverUseCase } from 'src/driver/application/use-cases/update-driver.use-case';
 import { DeleteDriverUseCase } from 'src/driver/application/use-cases/delete-driver.use-case';
@@ -67,12 +66,8 @@ export class DriverController {
   })
   @Get()
   @HttpCode(HttpStatus.OK)
-  async search(
-    @Query('name') name: string,
-    @Query('cnhCategories') cnhCategories: CnhCategories[],
-  ) {
-    const filters: SearchDriverRequest = { name, cnhCategories }
-    return this.searchDriversUseCase.execute(filters)
+  async search(@Query() query: SearchDriverRequest) {
+    return this.searchDriversUseCase.execute(query)
   }
 
   @ApiOperation({

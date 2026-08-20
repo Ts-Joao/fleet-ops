@@ -7,8 +7,8 @@ export class DriverMapper {
   static toDomain(entity: DriverEntity) {
     const cnh = Cnh.create(
       entity.cnh.number,
-      entity.cnh.issueDate,
-      entity.cnh.expiryDate,
+      new Date(entity.cnh.issueDate),
+      new Date(entity.cnh.expiryDate),
       entity.cnh.categories,
       entity.cnh.restrictions,
       entity.cnh.status,
@@ -17,7 +17,7 @@ export class DriverMapper {
     return Driver.create(
       entity.id,
       entity.name,
-      entity.birthDate,
+      new Date(entity.birthDate),
       cnh
     )
   }
