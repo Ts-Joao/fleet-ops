@@ -1,7 +1,9 @@
 import { Driver } from '@driver/domain/entities/driver';
 import { DriverNotFoundError } from '@driver/domain/errors/driver-not-found.error';
 import { DriverRepository } from '@driver/domain/ports/driver-repository';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class FindDriverByIdUseCase {
   constructor(private readonly driverRepository: DriverRepository) {}
 

@@ -4,7 +4,9 @@ import { Driver } from '@driver/domain/entities/driver'
 import { DriverNotFoundError } from '@driver/domain/errors/driver-not-found.error'
 import { Cnh } from '@driver/domain/value-object/cnh'
 import { CnhAlreadyExistsError } from '@driver/domain/errors/cnh-already-exist.error'
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class UpdateDriverUseCase {
   constructor(private readonly repository: DriverRepository) {}
 

@@ -1,6 +1,8 @@
 import { DriverNotFoundError } from '@driver/domain/errors/driver-not-found.error';
 import { DriverRepository } from '@driver/domain/ports/driver-repository';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class FindDriverByCnhNumberUseCase {
   constructor(private readonly driverRepository: DriverRepository) {}
 
