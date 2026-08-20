@@ -1,10 +1,12 @@
 import { Driver } from '@driver/domain/entities/driver';
 import { Cnh } from '@driver/domain/value-object/cnh';
-import { IdGenerator } from '@shared/application/ports/id-generator.port';
 import { RegisterDriverInput } from '../dto/register-driver.input';
 import { DriverRepository } from '@driver/domain/ports/driver-repository';
 import { CnhAlreadyExistsError } from '@driver/domain/errors/cnh-already-exist.error';
+import { Injectable } from '@nestjs/common';
+import { IdGenerator } from '@shared/application/ports/id-generator.port';
 
+@Injectable()
 export class RegisterDriverUseCase {
   constructor(
     private readonly driverRepository: DriverRepository,

@@ -1,6 +1,7 @@
 import { Cnh } from "src/driver/domain/value-object/cnh";
 import { DriverEntity } from "../enities/driver.entity";
 import { Driver } from "src/driver/domain/entities/driver";
+import { CnhEntity } from "../enities/cnh.entity";
 
 export class DriverMapper {
   static toDomain(entity: DriverEntity) {
@@ -23,16 +24,20 @@ export class DriverMapper {
 
   static toEntity(domain: Driver): DriverEntity {
     const entity = new DriverEntity();
+    const cnhEntity = new CnhEntity();
+
+    cnhEntity.id = crypto.randomUUID();
+    cnhEntity.number = domain.getCnh().getNumber();
+    cnhEntity.issueDate = domain.getCnh().getIssueDate();
+    cnhEntity.expiryDate = domain.getCnh().getExpiryDate();
+    cnhEntity.categories = domain.getCnh().getCategories();
+    cnhEntity.restrictions = domain.getCnh().getRestrictions();
+    cnhEntity.status = domain.getCnh().getStatus();
 
     entity.id = domain.getId();
     entity.name = domain.getName();
     entity.birthDate = domain.getBirthDate();
-    entity.cnh.number = domain.getCnh().getNumber();
-    entity.cnh.issueDate = domain.getCnh().getIssueDate();
-    entity.cnh.expiryDate = domain.getCnh().getExpiryDate();
-    entity.cnh.categories = domain.getCnh().getCategories();
-    entity.cnh.restrictions = domain.getCnh().getRestrictions();
-    entity.cnh.status = domain.getCnh().getStatus();
+    entity.cnh = cnhEntity;
 
     return entity;
   }

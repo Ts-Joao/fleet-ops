@@ -11,6 +11,8 @@ import { FindDriverByIdUseCase } from './application/use-cases/find-driver-by-id
 import { SearchDriversUseCase } from './application/use-cases/search-drivers.use-case';
 import { FindDriverByCnhNumberUseCase } from './application/use-cases/find-driver-by-cnh-number.use-case';
 import { CnhEntity } from './infrastructure/persistence/enities/cnh.entity';
+import { UuidGenerator } from '@shared/infrastructure/id/uuid-generator';
+import { IdGenerator } from '@shared/application/ports/id-generator.port';
 
 @Module({
   imports: [TypeOrmModule.forFeature([DriverEntity, CnhEntity])],
@@ -27,6 +29,10 @@ import { CnhEntity } from './infrastructure/persistence/enities/cnh.entity';
       provide: DriverRepository,
       useExisting: TypeOrmDriverRepository,
     },
+    {
+      provide: IdGenerator,
+      useClass: UuidGenerator
+    }
   ],
 })
 export class DriverModule {}
