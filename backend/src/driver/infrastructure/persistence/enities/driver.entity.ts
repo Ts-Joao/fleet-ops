@@ -1,7 +1,13 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
-import { CnhStatus } from '../../../domain/enums/cnh-status';
-import { CnhCategories } from '../../../domain/enums/cnh-category';
-import { CnhRestrictions } from '../../../domain/enums/cnh-restrictions';
+import { CnhEntity } from '@driver/infrastructure/persistence/enities/cnh.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('drivers')
 export class DriverEntity {
@@ -14,28 +20,12 @@ export class DriverEntity {
   @Column({ name: 'birth_date', type: 'date' })
   birthDate: Date;
 
-  @Column({ name: 'cnh_number', unique: true })
-  cnhNumber: string;
-
-  @Column({ name: 'cnh_issue_date', type: 'date' })
-  cnhIssueDate: Date;
-
-  @Column({ name: 'cnh_expiry_date', type: 'date' })
-  cnhExpiryDate: Date;
-
-  @Column({ name: 'cnh_categories', type: 'json', default: [] })
-  cnhCategories: CnhCategories[];
-
-  @Column({ name: 'cnh_restrictions', type: 'json', default: [] })
-  cnhRestrictions: CnhRestrictions[];
-
-  @Column({
-    name: 'cnh_status',
-    type: 'enum',
-    enum: CnhStatus,
-    default: CnhStatus.ACTIVE,
+  @OneToOne(() => CnhEntity, cnh => cnh.driver, {
+    cascade: true,
+    eager: true
   })
-  cnhStatus: CnhStatus;
+  @JoinColumn({ name: 'cnh_id' })
+  cnh: CnhEntity;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
