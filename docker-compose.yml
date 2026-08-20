@@ -12,5 +12,19 @@ services:
       - fleet-db-data:/var/lib/postgresql/data
     restart: always
 
+  postgres-test:
+    image: postgres:17
+    container_name: fleet-db-test
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_TEST}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_TEST_PORT}:5432"
+    volumes:
+      - fleet-db-test:/var/lib/postgresql/data
+    restart: always
+
 volumes:
   fleet-db-data: {}
+  fleet-db-test: {}
