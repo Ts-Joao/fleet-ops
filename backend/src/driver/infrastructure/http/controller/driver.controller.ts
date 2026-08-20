@@ -11,15 +11,15 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { RegisterDriverUseCase } from 'src/driver/application/use-cases/register-driver.use-case';
-import { FindDriverByIdUseCase } from 'src/driver/application/use-cases/find-driver-by-id.use-case';
-import { FindDriverByCnhNumberUseCase } from 'src/driver/application/use-cases/find-driver-by-cnh-number.use-case';
-import { SearchDriversUseCase } from 'src/driver/application/use-cases/search-drivers.use-case';
-import { RegisterDriverRequest } from '../dto/register-driver.request';
-import { SearchDriverRequest } from '../dto/search-driver.request';
-import { UpdateDriverRequest } from '../dto/update-driver.request';
-import { UpdateDriverUseCase } from 'src/driver/application/use-cases/update-driver.use-case';
-import { DeleteDriverUseCase } from 'src/driver/application/use-cases/delete-driver.use-case';
+import { RegisterDriverUseCase } from '@driver/application/use-cases/register-driver.use-case';
+import { FindDriverByIdUseCase } from '@driver/application/use-cases/find-driver-by-id.use-case';
+import { FindDriverByCnhNumberUseCase } from '@driver/application/use-cases/find-driver-by-cnh-number.use-case';
+import { SearchDriversUseCase } from '@driver/application/use-cases/search-drivers.use-case';
+import { RegisterDriverRequest } from '@driver/infrastructure/http/dto/register-driver.request';
+import { SearchDriverRequest } from '@driver/infrastructure/http/dto/search-driver.request';
+import { UpdateDriverRequest } from '@driver/infrastructure/http/dto/update-driver.request';
+import { UpdateDriverUseCase } from '@driver/application/use-cases/update-driver.use-case';
+import { DeleteDriverUseCase } from '@driver/application/use-cases/delete-driver.use-case';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 
