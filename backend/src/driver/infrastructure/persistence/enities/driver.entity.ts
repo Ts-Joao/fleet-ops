@@ -1,4 +1,4 @@
-import { CnhEntity } from '@driver/infrastructure/persistence/enities/cnh.entity';
+import { CnhEntity } from './cnh.entity';
 import {
   Column,
   CreateDateColumn,
