@@ -5,12 +5,12 @@ import { Driver } from "src/driver/domain/entities/driver";
 export class DriverMapper {
   static toDomain(entity: DriverEntity) {
     const cnh = Cnh.create(
-      entity.cnhNumber,
-      entity.cnhIssueDate,
-      entity.cnhExpiryDate,
-      entity.cnhCategories,
-      entity.cnhRestrictions,
-      entity.cnhStatus,
+      entity.cnh.number,
+      entity.cnh.issueDate,
+      entity.cnh.expiryDate,
+      entity.cnh.categories,
+      entity.cnh.restrictions,
+      entity.cnh.status,
     )
 
     return Driver.create(
@@ -27,12 +27,12 @@ export class DriverMapper {
     entity.id = domain.getId();
     entity.name = domain.getName();
     entity.birthDate = domain.getBirthDate();
-    entity.cnhNumber = domain.getCnh().getNumber();
-    entity.cnhIssueDate = domain.getCnh().getIssueDate();
-    entity.cnhExpiryDate = domain.getCnh().getExpiryDate();
-    entity.cnhCategories = domain.getCnh().getCategories();
-    entity.cnhRestrictions = domain.getCnh().getRestrictions();
-    entity.cnhStatus = domain.getCnh().getStatus();
+    entity.cnh.number = domain.getCnh().getNumber();
+    entity.cnh.issueDate = domain.getCnh().getIssueDate();
+    entity.cnh.expiryDate = domain.getCnh().getExpiryDate();
+    entity.cnh.categories = domain.getCnh().getCategories();
+    entity.cnh.restrictions = domain.getCnh().getRestrictions();
+    entity.cnh.status = domain.getCnh().getStatus();
 
     return entity;
   }

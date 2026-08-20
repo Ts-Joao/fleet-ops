@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, ILike, Raw, Repository } from 'typeorm';
+import { ArrayContains, FindOptionsWhere, ILike, Raw, Repository } from 'typeorm';
 import { Driver } from 'src/driver/domain/entities/driver';
 import { DriverRepository, DriverSearchFilters } from 'src/driver/domain/ports/driver-repository';
 import { DriverEntity } from '../enities/driver.entity';
@@ -28,10 +28,9 @@ export class TypeOrmDriverRepository implements DriverRepository {
     }
 
     if (filters.cnhCategories) {
-      where.cnhCategories = Raw(
-        (alias) => `${alias}:: jsonb @> :cnhCategories`,
-        { cnhCategories: JSON.stringify(filters.cnhCategories) },
-      );
+      where.cnh = {
+        categories: ArrayContains(filters.cnhCategories)
+      }
     }
 
     const entities = await this.repository.find({
@@ -55,7 +54,7 @@ export class TypeOrmDriverRepository implements DriverRepository {
 
   async findByCnhNumber(cnhNumber: string): Promise<Driver | null> {
     const entity = await this.repository.findOne({
-      where: { cnhNumber },
+      where: { cnh: { number: cnhNumber } },
     });
 
     if (!entity) {

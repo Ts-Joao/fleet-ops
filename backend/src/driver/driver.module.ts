@@ -10,9 +10,10 @@ import { UpdateDriverUseCase } from './application/use-cases/update-driver.use-c
 import { FindDriverByIdUseCase } from './application/use-cases/find-driver-by-id.use-case';
 import { SearchDriversUseCase } from './application/use-cases/search-drivers.use-case';
 import { FindDriverByCnhNumberUseCase } from './application/use-cases/find-driver-by-cnh-number.use-case';
+import { CnhEntity } from './infrastructure/persistence/enities/cnh.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([DriverEntity])],
+  imports: [TypeOrmModule.forFeature([DriverEntity, CnhEntity])],
   controllers: [DriverController],
   providers: [
     RegisterDriverUseCase,
