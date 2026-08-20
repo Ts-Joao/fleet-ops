@@ -21,6 +21,8 @@ import { CnhCategories } from 'src/driver/domain/enums/cnh-category';
 import { UpdateDriverRequest } from '../dto/update-driver.request';
 import { UpdateDriverUseCase } from 'src/driver/application/use-cases/update-driver.use-case';
 import { DeleteDriverUseCase } from 'src/driver/application/use-cases/delete-driver.use-case';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+
 
 @Controller('driver')
 export class DriverController {
@@ -33,12 +35,36 @@ export class DriverController {
     private readonly deleteDriverUseCase: DeleteDriverUseCase,
   ) {}
 
+  @ApiOperation({
+    summary: 'Register a new driver',
+    description: 'Register a new driver in the system',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Driver registered successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid request',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Driver already exists',
+  })
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() request: RegisterDriverRequest) {
     return this.registerDriverUseCase.execute(request);
   }
 
+  @ApiOperation({
+    summary: 'Search drivers',
+    description: 'Search drivers by name and CNH categories',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Drivers found successfully',
+  })
   @Get()
   @HttpCode(HttpStatus.OK)
   async search(
@@ -49,18 +75,54 @@ export class DriverController {
     return this.searchDriversUseCase.execute(filters)
   }
 
+  @ApiOperation({
+    summary: 'Find driver by ID',
+    description: 'Find driver by ID',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Driver found successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Driver not found',
+  })
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async findById(@Param('id', ParseUUIDPipe) id: string) {
     return this.findDriverByIdUseCase.execute(id);
   }
 
+  @ApiOperation({
+    summary: 'Find driver by CNH number',
+    description: 'Find driver by CNH number',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Driver found successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Driver not found',
+  })
   @Get('cnh/:number')
   @HttpCode(HttpStatus.OK)
   async findByCnhNumber(@Param('number') number: string) {
     return this.findDriverByCnhNumberUseCase.execute(number);
   }
 
+  @ApiOperation({
+    summary: 'Update driver',
+    description: 'Update driver',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Driver updated successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Driver not found',
+  })
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
   async update(@Param('id', ParseUUIDPipe) id: string, @Body() request: UpdateDriverRequest) {
@@ -70,6 +132,18 @@ export class DriverController {
     });
   }
 
+  @ApiOperation({
+    summary: 'Delete driver',
+    description: 'Delete driver',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Driver deleted successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Driver not found',
+  })
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   async delete(@Param('id', ParseUUIDPipe) id: string) {
